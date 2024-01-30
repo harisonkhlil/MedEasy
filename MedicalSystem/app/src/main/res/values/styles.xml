@@ -1,0 +1,202 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
+    <!--用于首页底栏tab的风格-->
+    <declare-styleable name="AlphaView">
+        <attr name="av_tabIconNormal" format="reference" />
+        <attr name="av_tabIconSelected" format="reference" />
+        <attr name="av_tabText" format="string" />
+        <attr name="av_tabTextSize" format="dimension" />
+        <attr name="av_textColorNormal" format="color" />
+        <attr name="av_textColorSelected" format="color" />
+    </declare-styleable>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--沉浸式主题-->
+    <style name="ImmersiveTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
+        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
+    </style>
+
+
+
+
+    <style name="dialog" parent="@android:style/Theme.Holo.Dialog">
+        <!-- 是否有边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!--是否在悬浮Activity之上  -->
+        <item name="android:windowIsFloating">true</item>
+        <!--标题  -->
+        <item name="android:windowNoTitle">true</item>
+        <!--阴影  -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--透明背景-->
+        <item name="android:background">@android:color/transparent</item>
+        <!--窗口背景透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--弹窗背景是否变暗-->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="itemTitleStyle">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:textColor">@color/gray_item_title</item>
+    </style>
+
+    <style name="itemContentStyle">
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_toRightOf">@+id/tv_title</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:textColor">@color/black_item_content</item>
+    </style>
+
+
+    <style name="CheckBoxStyle_Green" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/gray1</item>
+        <item name="colorControlActivated">@color/green</item>
+    </style>
+
+
+    <style name="BlueHollowButton">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textColor">@color/blue_title_text</item>
+        <item name="android:background">@null</item>
+        <item name="bl_gradient_angle">0</item>
+        <item name="bl_gradient_startColor">@color/blue_title_background</item>
+        <item name="bl_gradient_endColor">@color/blue_title_background</item>
+        <item name="bl_corners_radius">5dp</item>
+        <item name="bl_stroke_color">@color/blue_title_text</item>
+        <item name="bl_stroke_width">0.3dp</item>
+    </style>
+
+    <style name="BlueSolidButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="bl_corners_radius">5dp</item>
+        <item name="bl_gradient_angle">0</item>
+        <item name="bl_gradient_startColor">#3BBCFF</item>
+        <item name="bl_gradient_endColor">#4FA5FF</item>
+    </style>
+
+    <style name="LightBlueSolidButton">
+        <item name="android:gravity">center</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:textColor">@color/blue_title_text</item>
+        <item name="bl_corners_radius">8dp</item>
+        <item name="bl_solid_color">@color/blue_title_background</item>
+    </style>
+
+
+    <style name="LightGreenSolidButton">
+        <item name="android:gravity">center</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="bl_corners_radius">8dp</item>
+        <item name="bl_solid_color">@color/greenLight</item>
+    </style>
+
+
+    <style name="RedSolidButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">5dp</item>
+        <item name="bl_gradient_angle">0</item>
+        <item name="android:padding">2dp</item>
+        <item name="bl_gradient_startColor">#F08080</item>
+        <item name="bl_gradient_endColor">#FA8072</item>
+    </style>
+
+
+    <style name="GreenSolidButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">5dp</item>
+        <item name="android:padding">2dp</item>
+        <item name="bl_gradient_angle">0</item>
+        <item name="bl_gradient_startColor">#84bf96</item>
+        <item name="bl_gradient_endColor">#45b97c</item>
+    </style>
+
+
+    <style name="PopupTitleTextStyle">
+        <item name="android:textColor">@color/black2</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+
+    <style name="PurpleSolidButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">5dp</item>
+        <item name="android:padding">2dp</item>
+        <item name="bl_gradient_angle">0</item>
+        <item name="bl_gradient_startColor">#9b95c9</item>
+        <item name="bl_gradient_endColor">#6a6da9</item>
+    </style>
+
+
+    <style name="YellowSolidButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">5dp</item>
+        <item name="android:padding">2dp</item>
+        <item name="bl_gradient_angle">0</item>
+        <item name="bl_gradient_startColor">#fab27b</item>
+        <item name="bl_gradient_endColor">#faa755</item>
+    </style>
+
+
+    <style name="GraySolidButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">5dp</item>
+        <item name="android:padding">2dp</item>
+        <item name="bl_gradient_angle">0</item>
+        <item name="bl_gradient_startColor">#BFBFBF</item>
+        <item name="bl_gradient_endColor">#A2A2A2</item>
+    </style>
+
+
+    <style name="YellowRedSolidButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">5dp</item>
+        <item name="android:padding">2dp</item>
+        <item name="bl_gradient_angle">0</item>
+        <item name="bl_gradient_startColor">#FFC02A</item>
+        <item name="bl_gradient_endColor">#F08080</item>
+    </style>
+
+
+</resources>

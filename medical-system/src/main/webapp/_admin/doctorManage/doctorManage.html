@@ -1,0 +1,277 @@
+#@adminLayout()
+#define main()
+<div class="panel">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12 form-inline" id="toolbar">
+                <div class="btn btn-info" id="addBtn">新增医生</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12 form-inline">
+                <table id="btTable" style="white-space: nowrap;overflow:hidden;table-layout: fixed">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<textarea style="display: none" id="popId">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>帐号</label>
+                    <input class="form-control" id="account" maxlength="32" placeholder="请输入帐号">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>密码</label>
+                    <input class="form-control" type="password" id="password" maxlength="32" placeholder="请输入密码">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input class="form-control" id="name" maxlength="8" placeholder="请输入姓名">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>性别</label>
+                    <select class="form-control" id="sex">
+                        #for(x:sexEnum)
+                            <option value="#(x.value)">#(x.text)</option>
+                        #end
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>科室</label>
+                    <select class="form-control" id="department">
+                        #for(x:departmentEnum)
+                            <option value="#(x.value)">#(x.text)</option>
+                        #end
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>介绍</label>
+                    &lt;textarea class="form-control" id="introduction" rows="3" style="resize: none" placeholder="请输入介绍"&gt;&lt;/textarea&gt;
+                </div>
+            </div>
+        </div>
+    </div>
+</textarea>
+#define js()
+<script type="text/javascript">
+    var $table = $("#btTable");
+    $(function () {
+        initTable();
+        $("#addBtn").on("click",function () {
+            openAddNewUI(true);
+        });
+    });
+    //查询函数
+    function initTable() {
+        $table.bootstrapTable("destroy");
+        //初始化字段数据
+        $table.bootstrapTable({
+            url: "/doctorManage/list",                      //请求后台的URL（*）
+            method: 'post',                      //请求方式（*）
+            //toolbar: '#toolbar',              //工具按钮用哪个容器
+            striped: true,                      //是否显示行间隔色
+            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                   //是否显示分页（*）
+            sortable: false,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
+            pageSize: 10,                       //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            search: false,                      //是否显示表格搜索
+            strictSearch: true,
+            showColumns: true,                  //是否显示所有的列（选择显示的列）
+            showRefresh: true,                  //是否显示刷新按钮
+            minimumCountColumns: 2,             //最少允许的列数
+            clickToSelect: true,                //是否启用点击选中行
+            //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+            showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+            cardView: false,                    //是否显示详细视图
+            detailView: false,                  //是否显示父子表
+            //得到查询的参数
+            queryParams : function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    limit: params.limit,                         //页面大小
+                    offset: params.offset                       //页码
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'index',
+                title: '序号',
+                formatter: function (value,row,index) {
+                    return index+1;
+                }
+            }, {
+                field: 'name',
+                title: '姓名',
+                sortable: true
+            }, {
+                field: 'account',
+                title: '账号',
+                sortable: true
+            }, {
+                field: 'sex_text',
+                title: '性别'
+            }, {
+                field: 'department_text',
+                title: '科室'
+            }, {
+                field: 'introduction',
+                title: '介绍',
+                cellStyle: textOverflow(150)
+            },
+            {
+                field: 'operate',
+                title: '操作',
+                formatter:function (value,row,index) {
+                    var html = [
+                        '<button id="bt_modify" class="btn btn-info btn-xs">',
+                        '<i class="glyphicon glyphicon-pencil"></i>修改',
+                        '</button>',
+                        '<button id="bt_remove" class="btn btn-danger btn-xs" style="margin-left:5px">',
+                        '<i class="glyphicon glyphicon-remove"></i>删除',
+                        '</button>',
+                    ];
+                    return html.join("");
+                },
+                events:{
+                    'click #bt_modify': function (e,value,row,index) {
+                        openAddNewUI(false,row);
+                    },
+                    'click #bt_remove': function (e,value,row,index) {
+                        layer.confirm("确认要删除吗？",{icon:3,title:'提示'},function (index) {
+                           layer.close(index);
+                           doPost("/doctorManage/delete",{id:row.id},function (json) {
+                               showPostOk(json.msg);
+                               $table.bootstrapTable("refresh");
+                           },function (json) {
+                               showPostFail(json.msg);
+                           });
+                        });
+                    }
+                }
+            },
+            ],
+            onLoadSuccess: function () {
+            },
+            onLoadError: function () {
+                showTips("数据加载失败！");
+            }
+        });
+    }
+
+    //打开新增和修改页面
+    function openAddNewUI(isAddNew,row) {
+        var title = (isAddNew?"新增":"修改")+"帐号";
+        layer.open({
+            type:1,
+            title:title,
+            area:['400px','auto'],
+            btn:['保存','取消'],
+            content:$("#popId").val(),
+            success:function () {       //打开页面给元素赋值、判断
+                if(isAddNew){
+                    $("#account").on("blur",function () {
+                        var val = $("#account").val();
+                        if(!hasText(val)){
+                            showTip("帐号不能为空","account");
+                            return;
+                        }
+                        doPost("/doctorManage/checkAccount",{account:val},function (ret) {
+
+                        },function (ret) {
+                            showTip(ret.msg,"account");
+                        });
+                    });
+                }else {
+                    $("#account").attr("disabled","disabled");
+                    $("#account").val(row.account);
+                    $("#password").parents(".col-md-12").hide();
+                    $("#name").val(row.name);
+                    $("#sex").val(row.sex);
+                    $("#department").val(row.department);
+                    $("#introduction").val(row.introduction);
+                }
+            },
+            yes:function (index) {           //提交表单
+                if(isAddNew){               //新增
+                    if(!hasText($("#account").val())){
+                        showTip("帐号不能为空","account");
+                        return;
+                    }
+                    if(!hasText($("#password").val())){
+                        showTip("密码不能为空","password");
+                        return;
+                    }
+                }
+                if(!hasText($("#name").val())){
+                    showTip("姓名不能为空","name");
+                    return;
+                }
+                var url = isAddNew?'/doctorManage/save' :'/doctorManage/update';
+                var data = {
+                    name:$("#name").val(),
+                    sex:$("#sex").val(),
+                    department:$("#department").val(),
+                    introduction:$("#introduction").val()
+                };
+                if(isAddNew){
+                    data.account = $("#account").val();
+                    data.password = $("#password").val();
+                }else{
+                    data.id = row.id;
+                }
+                doPost(url,data,function (ret) {
+                    showPostOk(ret.msg);
+                    $table.bootstrapTable("refresh");
+                    layer.close(index);
+                });
+            }
+        });
+    }
+</script>
+#end
+#end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="www.test.com.medical_system">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".CustomApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/system_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:label"
+        tools:targetApi="n">
+        <activity
+            android:name=".activity.FaceActivity"
+            android:exported="false" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="www.test.com.medical_system.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+        <activity
+            android:name=".activity.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/ImmersiveTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/ImmersiveTheme"></activity>
+        <activity
+            android:name=".activity.IntroActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/ImmersiveTheme"></activity>
+        <activity
+            android:name=".activity.GuideActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/ImmersiveTheme"></activity>
+        <activity
+            android:name=".activity.AppointmentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/ImmersiveTheme"></activity>
+        <activity
+            android:name=".activity.OthersListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/ImmersiveTheme"></activity>
+        <activity
+            android:name=".activity.RecordListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/ImmersiveTheme"></activity>
+    </application>
+
+</manifest>

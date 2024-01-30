@@ -1,0 +1,325 @@
+#@adminLayout()
+#define main()
+<div class="panel">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12 form-inline" id="toolbar">
+                <label class="control-label">患者姓名：</label>
+                <input type="text" class="form-control" id="searchName" placeholder="请输入姓名">
+                <div class="btn btn-info btn-sm" id="searchBtn">
+                    <i class="glyphicon glyphicon-search"></i>查询
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12 form-inline">
+                <table id="btTable" style="white-space: nowrap;overflow:hidden;table-layout: fixed">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<textarea id="caseTableUI" style="display: none">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="caseTable" style="white-space: nowrap;overflow:hidden;table-layout: fixed">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</textarea>
+#define js()
+<script type="text/javascript">
+    var $table = $("#btTable");
+    $(function () {
+        initTable();
+        $("#searchBtn").on("click",function () {
+            $table.bootstrapTable("refresh");
+        });
+    });
+    //查询函数
+    function initTable() {
+        $table.bootstrapTable("destroy");
+        //初始化字段数据
+        $table.bootstrapTable({
+            url: "/appointment/list",                      //请求后台的URL（*）
+            method: 'post',                      //请求方式（*）
+            //toolbar: '#toolbar',              //工具按钮用哪个容器
+            striped: true,                      //是否显示行间隔色
+            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                   //是否显示分页（*）
+            sortable: false,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
+            pageSize: 10,                       //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            search: false,                      //是否显示表格搜索
+            strictSearch: true,
+            showColumns: true,                  //是否显示所有的列（选择显示的列）
+            showRefresh: true,                  //是否显示刷新按钮
+            minimumCountColumns: 2,             //最少允许的列数
+            clickToSelect: true,                //是否启用点击选中行
+            //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+            showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+            cardView: false,                    //是否显示详细视图
+            detailView: false,                  //是否显示父子表
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            //得到查询的参数
+            queryParams : function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    limit: params.limit,                         //页面大小
+                    offset: params.offset,                       //页码
+                    name: $("#searchName").val()
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'index',
+                title: '序号',
+                formatter: function (value,row,index) {
+                    return index+1;
+                }
+            }, {
+                field: 'real_patient_name',
+                title: '患者姓名'
+            }, {
+                field: 'sex',
+                title: '性别'
+            }, {
+                field: 'age',
+                title: '年龄'
+            }, {
+                field: 'id_num',
+                title: '身份证'
+            }, {
+                field: 'date',
+                title: '预约日期',
+                formatter: function (value,row,index) {
+                    return subDateStr(value);
+                }
+            }, {
+                field: 'time_text',
+                title: '预约时段'
+            },{
+                field: 'department_text',
+                title: '预约科室'
+            },{
+                field: 'status_text',
+                title: '预约状态'
+            },
+            {
+                field: 'operate',
+                title: '操作',
+                width: '200px',
+                formatter:function (value,row,index) {
+                    var html = [
+                        '<button id="bt_case" class="btn btn-info btn-xs">',
+                        '<i class="glyphicon glyphicon-eye-open"></i>历史病例',
+                        '</button>',
+                        '<button id="bt_add" class="btn btn-success btn-xs" style="margin-left:5px">',
+                        '<i class="glyphicon glyphicon-plus"></i>新增病例',
+                        '</button>',
+                    ];
+                    return html.join("");
+                },
+                events:{
+                    'click #bt_case': function (e,value,row,index) {
+                        openCaseUI(row.id);
+                    },
+                    'click #bt_add': function (e,value,row,index) {
+                        openAddCaseUI(row.id);
+                    }
+                }
+            },
+            ],
+            onLoadSuccess: function () {
+            },
+            onLoadError: function () {
+                showTips("数据加载失败！");
+            }
+        });
+    }
+
+    /*新增病例*/
+    function openAddCaseUI(id) {
+        layer.open({
+            type:1,
+            title:"新增病例",
+            area:['500px','auto'],          //宽度500px，高度自适应
+            btn:["保存","取消"],
+            content: '<div class="container-fluid">'+
+                        '<div class="row">'+
+                            '<div class="col-md-12">' +
+                                '<textarea id="addCaseArea" class="form-control" style="padding:10px 0px;height: 600px;resize: none" placeholder="请输入病例"></textarea> '+
+                            '</div>'+
+                        '</div>'+
+                '</div>',
+            yes:function (index,layero) {
+                var content = $("#addCaseArea").val();
+                if(!hasText(content)){
+                    showTip("病例不能为空","addCaseArea");
+                    return;
+                }
+                doPost("/appointment/addCase",{id:id,content:content},function (ret) {
+                    showPostOk(ret.msg);
+                    layer.close(index);
+                    $table.bootstrapTable("refresh");
+                });
+            }
+        });
+    }
+
+    /*打开历史病例弹出框*/
+    function openCaseUI(id) {
+        layer.open({
+            type: 1,
+            title:"病例列表",
+            area:['800px','500px'],          //宽度800px，高度500px
+            content:$("#caseTableUI").val(),
+            success:function () {
+                var $caseTable = $("#caseTable");
+                $caseTable.bootstrapTable("destroy");
+                //初始化字段数据
+                $caseTable.bootstrapTable({
+                    url: "/appointment/caseList",                      //请求后台的URL（*）
+                    method: 'post',                      //请求方式（*）
+                    //toolbar: '#toolbar',              //工具按钮用哪个容器
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sortable: false,                     //是否启用排序
+                    sortOrder: "asc",                   //排序方式
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                    search: false,                      //是否显示表格搜索
+                    strictSearch: true,
+                    showColumns: true,                  //是否显示所有的列（选择显示的列）
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,                    //是否显示详细视图
+                    detailView: false,                  //是否显示父子表
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    //得到查询的参数
+                    queryParams : function (params) {
+                        //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                        var temp = {
+                            limit: params.limit,                         //页面大小
+                            offset: params.offset,                       //页码
+                            id: id
+                        };
+                        return temp;
+                    },
+                    columns: [{
+                        field: 'index',
+                        title: '序号',
+                        formatter: function (value,row,index) {
+                            return index+1;
+                        }
+                    }, {
+                        field: 'real_patient_name',
+                        title: '患者姓名'
+                    }, {
+                        field: 'content',
+                        title: '病例内容',
+                        cellStyle:textOverflow(150)
+                    }, {
+                        field: 'doctor_name',
+                        title: '就诊医生'
+                    }, {
+                        field: 'department_text',
+                        title: '科室'
+                    }, {
+                        field: 'date',
+                        title: '就诊时间',
+                        formatter: function (value,row,index) {
+                            return subDateStr(value);
+                        }
+                    }, {
+                        field: 'operate',
+                        title: '操作',
+                        formatter:function (value,row,index) {
+                            var html = [
+                                '<button id="bt_case_detail" class="btn btn-info btn-xs">',
+                                '<i class="glyphicon glyphicon-eye-open"></i>查看病例',
+                                '</button>'
+                            ];
+                            return html.join("");
+                        },
+                        events:{
+                            'click #bt_case_detail': function (e,value,row,index) {
+                               //查看病例
+                                openCaseDetailUI(row.content);
+                            }
+                        }
+                    },
+                    ],
+                    onLoadSuccess: function () {
+                    },
+                    onLoadError: function () {
+                        showTips("数据加载失败！");
+                    }
+                });
+            }
+        });
+    }
+
+    /*查看病例详情*/
+    function openCaseDetailUI(content) {
+        layer.open({
+            type:1,
+            title:"查看病例",
+            area:['500px','auto'],          //宽度500px，高度自适应
+            content: '<div class="container-fluid">'+
+                '<div class="row">'+
+                '<div class="col-md-12">' +
+                    '<div id="caseDetailDiv" style="padding:10px 0px;height: 600px;"></div> '+
+                '</div>'+
+                '</div>'+
+                '</div>',
+            success:function () {
+                $("#caseDetailDiv").text(content);
+            }
+        });
+    }
+
+</script>
+#end
+#end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

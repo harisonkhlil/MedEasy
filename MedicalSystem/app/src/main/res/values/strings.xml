@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">医简通</string>
+    <string name="system_name">医简通</string>
+    <string name="copyright_information">2023/05/31 ©基于Android的信息化医疗服务系统</string>
+</resources>

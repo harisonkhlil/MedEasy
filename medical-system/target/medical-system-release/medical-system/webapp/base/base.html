@@ -1,0 +1,101 @@
+#define adminLayout()
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医疗管理系统后台</title>
+    <link href="../bootstrap-table/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet" type="text/css">
+    <link href="../bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/icons.css" rel="stylesheet" type="text/css">
+    <link href="../css/style.css" rel="stylesheet" type="text/css">
+    <link href="../layer/skin/default/layer.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div>
+    <div class="left side-menu">
+        <div class="sidebar-inner">
+            <div class="user-details">
+                <div class="text-center">
+                    <a href="/index"><img src="../images/user.jpg" class="img-circle"></a>
+                </div>
+                <div class="user-info">
+                    <h4 class="font-16 text-white">#(userName)</h4>
+                    <span class="text-white"><i class="fa fa-dot-circle-o text-success"></i> Online </span>
+                </div>
+            </div>
+            <div id="sidebar-menu">
+                <ul>
+                    <li class="menu-title text-white"><span>我的菜单</span></li>
+                    #for(adminMenu:getMenuList(userType))
+                    <li>
+                        <a href="#(adminMenu.url)" class="waves-effect"><i class="#(adminMenu.icon)"></i><span>#(adminMenu.name)</span></a>
+                    </li>
+                    #end
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="content-page">
+        <div class="content">
+            <div class="topbar">
+                <nav class="navbar-custom">
+                    <ul class="list-inline pull-right mb-0">
+                        <li class="list-inline dropdown notification-list">
+                            <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#">
+                                <img src="../images/user.jpg" class="rounded-circle">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right profile-dropdown">
+                                <li>
+                                    <a href="/modifyPassword"><i class="mdi mdi-settings m-r-5 text-muted"></i><span>修改密码</span> </a>
+                                </li>
+                                <li>
+                                    <a href="/logout"><i class="mdi mdi-logout m-r-5 text-muted"></i><span>注销</span> </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </nav>
+            </div>
+            <div class="page-content-wrapper">
+                #@main()
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery-2.2.3.min.js"></script>
+<script src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="../js/common.js"></script>
+<script src="../layer/layer.js"></script>
+<script src="../bootstrap-table/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="../bootstrap-table/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+#@js?()
+</body>
+</html>
+#end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
